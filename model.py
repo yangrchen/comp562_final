@@ -2,14 +2,15 @@
 
 from data import *
 
-tokenizer=AutoTokenizer.from_pretrained("huggingface/CodeBERTa-small-v1")
-tokenizer.add_special_tokens({'bos_token':'<s>','eos_token':'</s>','unk_token':'unk'})
-model_hugging=AutoModelForMaskedLM.from_pretrained("huggingface/CodeBERTa-small-v1")
-emb=model_hugging.get_input_embeddings()
-v_size=tokenizer.vocab_size
+# tokenizer=AutoTokenizer.from_pretrained("huggingface/CodeBERTa-small-v1")
+# tokenizer=AutoTokenizer.from_pretrained("huggingface/CodeBERTa-small-v1")
+# tokenizer.add_special_tokens({'bos_token':'<s>','eos_token':'</s>','unk_token':'unk'})
+# model_hugging=AutoModelForMaskedLM.from_pretrained("huggingface/CodeBERTa-small-v1")
+# emb=model_hugging.get_input_embeddings()
+v_size=tokenizer_code.get_vocab_size()
+print("the vocab size is ",v_size)
 
 """transformer model adopted from fast.ai with some changes from https://openreview.net/forum?id=Hyl7ygStwB"""
-
 def feed_forward(d_model, d_ff, ff_p=0., double_drop=True):
     layers = [nn.Linear(d_model, d_ff), nn.ReLU()]
     if double_drop: layers.append(nn.Dropout(ff_p))
@@ -46,64 +47,87 @@ class MultiHeadAttention(nn.Module):
         return attn_vec.permute(0, 2, 1, 3).contiguous().view(bs, seq_len, -1)
 
 
-def get_output_mask(inp):
+def get_output_mask(inp, pad_idx=1):
     return torch.triu(inp.new_ones(inp.size(1),inp.size(1)), diagonal=1)[None,None].bool()
-
-class BertBlock(nn.Module):
-  def __init__(self, n_heads, d_model, d_head, d_inner, p=0., bias=True, scale=True, double_drop=True):
-    super().__init__()
-    self.model=model_hugging
-    self.lin=nn.Linear(v_size,d_model)
-  def forward(self,  input_ids, attention_mask=None):
-    return self.lin(self.model(input_ids, attention_mask=attention_mask)[0].squeeze())
-
+#     return ((inp == pad_idx)[:,None,:,None].long() + torch.triu(inp.new_ones(inp.size(1),inp.size(1)), diagonal=1)[None,None] != 0)
 
 class EncoderBlock(nn.Module):
+    "Encoder block of a Transformer model."
+    #Can't use Sequential directly cause more than one input...
     def __init__(self, n_heads, d_model, d_head, d_inner, p=0., bias=True, scale=True, double_drop=True):
         super().__init__()
         self.mha = MultiHeadAttention(n_heads, d_model, d_head, p=p, bias=bias, scale=scale)
-        self.mha_bert=MultiHeadAttention(n_heads, d_model, d_head, p=p, bias=bias, scale=scale)
         self.ff  = feed_forward(d_model, d_inner, ff_p=p, double_drop=double_drop)
     
-    def forward(self, x,bert_out, mask=None):
-      att_self=self.mha(x,x)
-      att_bertde=self.mha_bert(att_self,bert_out)
-      return self.ff(att_bertde)
-      
+    def forward(self, x, mask=None): return self.ff(self.mha(x, x, mask=mask))
+
 class DecoderBlock(nn.Module):
+    "Decoder block of a Transformer model."
+    #Can't use Sequential directly cause more than one input...
     def __init__(self, n_heads, d_model, d_head, d_inner, p=0., bias=True, scale=True, double_drop=True):
         super().__init__()
         self.mha1 = MultiHeadAttention(n_heads, d_model, d_head, p=p, bias=bias, scale=scale)
         self.mha2 = MultiHeadAttention(n_heads, d_model, d_head, p=p, bias=bias, scale=scale)
-        self.mha_bert = MultiHeadAttention(n_heads, d_model, d_head, p=p, bias=bias, scale=scale)
         self.ff   = feed_forward(d_model, d_inner, ff_p=p, double_drop=double_drop)
     
-    def forward(self, x, enc, bert_out, mask_out=None):
-        att_self=self.mha1(x,x,mask_out)
-        att_endec=self.mha2(att_self, enc)
-        att_bertde=self.mha_bert(att_self,bert_out)
-        att_net=(att_endec+att_bertde)/2
-        return self.ff(att_net)
+    def forward(self, x, enc, mask_out=None): return self.ff(self.mha2(self.mha1(x, x, mask_out), enc))
 
 class Model(nn.Module):
-    def __init__(self, v_size=v_size, d_model=128, n_layers=4, n_heads=8, d_head=16, d_inner=128, p=0.1, bias=True):
+    def __init__(self, v_size=v_size, d_model=128, n_layers=4, n_heads=8, d_head=32, d_inner=256, p=0.1, bias=True):
         super(Model,self).__init__()
-        self.embed=nn.Embedding(v_size, d_model)
+        self.embed_src=nn.Embedding(v_size, d_model)
+        self.embed_code=nn.Embedding(v_size, d_model)
         args = (n_heads, d_model, d_head, d_inner, p, bias)
         self.encoder = nn.ModuleList([EncoderBlock(*args) for _ in range(n_layers)])
         self.decoder = nn.ModuleList([DecoderBlock(*args) for _ in range(n_layers)])
         # self.bert=nn.ModuleList([BertBlock(*args) for _ in range(n_layers)])
-        self.bert=BertBlock(*args)
+        # self.bert=BertBlock(*args)
         self.out=nn.Linear(d_model, v_size)
+        self.new_tensor = torch.LongTensor
     
-    def forward(self, inp, out):
-        mask = get_output_mask(out)
-        bert_out=self.bert(inp)
-        enc,out=self.embed(inp),self.embed(out)
-        enc = compose(self.encoder)(enc,bert_out)
-        out = compose(self.decoder)(out, enc,bert_out, mask)
-        out=self.out(out)
-        return out
+    def forward(self, inp, out=None,gs=False):
+        if gs:
+            return self.greedy_search(inp)
+        else:
+            mask = get_output_mask(out)
+            # bert_out=self.bert(inp)
+            enc,out=self.embed_src(inp),self.embed_code(out)
+            # print("the shapes are ",enc.shape, out.shape)
+            enc = compose(self.encoder)(enc)
+
+            # print("shape ",enc.shape)
+            out = compose(self.decoder)(out, enc, mask)
+            # print(enc.shape, out.shape)
+            out=self.out(out)
+            return out
+    
+    def greedy_search(self, inp, max_len=20):
+        # print ("the input is ",inp)
+        
+        enc=self.embed_src(inp).unsqueeze(dim=0)
+        # print("th emb is ",enc)
+        # print("the shape of input is ",enc.shape)
+        enc = compose(self.encoder)(enc)
+        
+        array=[0]
+        # out=torch.tensor([0])
+        for i in range(max_len):
+            out=self.new_tensor(array).unsqueeze(dim=0).to(device)
+            out=self.embed_code(out)
+            
+            out=compose(self.decoder)(out, enc)
+            
+            out=out.detach()
+            # print("the shape of the out is ",out.shape)
+            # print("-1",out[:,-1,:].squeeze().shape)
+            token=torch.argmax(out[:,-1,:].squeeze())
+            array.append(token.item())
+        # print(tokenizer.decode(array))
+        # print(tokenizer.decode(inp))
+        return array
+
+
+
 
 
 
