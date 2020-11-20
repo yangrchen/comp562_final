@@ -7,8 +7,9 @@ from data import *
 # tokenizer.add_special_tokens({'bos_token':'<s>','eos_token':'</s>','unk_token':'unk'})
 # model_hugging=AutoModelForMaskedLM.from_pretrained("huggingface/CodeBERTa-small-v1")
 # emb=model_hugging.get_input_embeddings()
-v_size=tokenizer_code.get_vocab_size()
-print("the vocab size is ",v_size)
+v_size=len(vocab.primitive)
+src_v_size=len(vocab.source)
+print("the vocab size is ",v_size,src_v_size)
 
 """transformer model adopted from fast.ai with some changes from https://openreview.net/forum?id=Hyl7ygStwB"""
 def feed_forward(d_model, d_ff, ff_p=0., double_drop=True):
@@ -73,9 +74,9 @@ class DecoderBlock(nn.Module):
     def forward(self, x, enc, mask_out=None): return self.ff(self.mha2(self.mha1(x, x, mask_out), enc))
 
 class Model(nn.Module):
-    def __init__(self, v_size=v_size, d_model=128, n_layers=4, n_heads=8, d_head=32, d_inner=256, p=0.1, bias=True):
+    def __init__(self, v_size=v_size,src_v_size=src_v_size, d_model=256, n_layers=6, n_heads=8, d_head=32, d_inner=512, p=0.1, bias=True):
         super(Model,self).__init__()
-        self.embed_src=nn.Embedding(v_size, d_model)
+        self.embed_src=nn.Embedding(src_v_size, d_model)
         self.embed_code=nn.Embedding(v_size, d_model)
         args = (n_heads, d_model, d_head, d_inner, p, bias)
         self.encoder = nn.ModuleList([EncoderBlock(*args) for _ in range(n_layers)])
@@ -101,7 +102,7 @@ class Model(nn.Module):
             out=self.out(out)
             return out
     
-    def greedy_search(self, inp, max_len=20):
+    def greedy_search(self, inp, max_len=15):
         # print ("the input is ",inp)
         
         enc=self.embed_src(inp).unsqueeze(dim=0)
@@ -114,8 +115,9 @@ class Model(nn.Module):
         for i in range(max_len):
             out=self.new_tensor(array).unsqueeze(dim=0).to(device)
             out=self.embed_code(out)
-            
+            # mask = get_output_mask(out)
             out=compose(self.decoder)(out, enc)
+            out=self.out(out)
             
             out=out.detach()
             # print("the shape of the out is ",out.shape)
@@ -124,7 +126,7 @@ class Model(nn.Module):
             array.append(token.item())
         # print(tokenizer.decode(array))
         # print(tokenizer.decode(inp))
-        return array
+        return array[1:]
 
 
 

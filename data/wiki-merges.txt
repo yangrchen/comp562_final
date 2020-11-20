@@ -1,0 +1,917 @@
+#version: 0.2 - Trained by `huggingface/tokenizers`
+i n
+s t
+o n
+  a
+t h
+,  
+  in
+t e
+o r
+l i
+in g
+ a  
+e  
+, "
+r e
+ in  
+" 
+
+t o
+e r
+  f
+y th
+yth on
+li st
+) "
+
+l e
+" "
+( '
+o w
+d a
+m e
+  to
+t i
+a r
+st r
+t  
+a n
+s  
+a l
+ to  
+' , 
+o f
+) 
+
+P ython
+d i
+H ow
+u m
+r o
+ing  
+c o
+s e
+ f or
+, How
+e x
+t (
+r a
+u e
+ for  
+of  
+str ing
+t a
+d  
+',  '
+e n
+y  
+i te
+ti on
+c h
+=  
+v al
+g e
+l a
+di c
+p ython
+list  
+m a
+s .
+d e
+:  
+k e
+th e 
+f i
+"" ""
+,How  to 
+v er
+u p
+l o
+' )
+   
+d f
+val ue
+w i
+? ,"
+p a
+( )
+ro m
+wi th
+u n
+\ \
+te r
+' ]
+c e
+ke y
+e c
+[ '
+da te
+ite m
+ a n
+. s
+ in  Python
+? ,
+ti me
+ f rom
+o  
+c on
+s i
+u r
+l l
+ in  a 
+1 0
+me n
+l e 
+Python  
+an da
+tion ar
+n um
+in d
+s or
+i f
+n a
+ in  python
+dic tionar
+e le
+' )"
+
+2 0
+t ('
+r in
+u b
+] 
+
+i p
+with  
+list  of 
+) )"
+
+m p
+p li
+u l
+\ n
+m o
+p rin
+u s
+' )
+
+da ta
+)  for 
+,How  
+1 ,
+2 ,
+co l
+I  
+i s
+m y
+r an
+re a
+ a r
+. f
+4 ,
+1 6
+3 ,
+c a
+d (
+t  a 
+  = 
+m b
+8 ,
+na me
+7 ,
+s ,"
+men t
+9 ,
+1 2
+um n
+list (
+5 ,
+t r
+df .
+] "
+
+a c
+s ()
+6 ,
+col umn
+if  
+m e 
+anda s 
+1 5
+st  
+fi le
+1 3
+1 9
+0 ,
+pa th
+p y
+1 4
+s ,
+u t
+o p
+ra y
+mo v
+d .
+ from  a 
+of  a 
+1 7
+t ing 
+la mb
+lamb da
+key =
+date time
+[ 1
+d o 
+s ub
+1 8
+lambda  
+R e
+[ 0
+ing  a 
+) )
+
+t up
+re s
+ele ment
+)  
+) .
+) , 
+a t
+b er
+o s.
+te  
+b y
+s  in a 
+x t
+o in
+ f i
+ra me
+t w
+num ber
+ in to
+le n
+sor te
+prin t(
+or d
+str ing 
+2 2
+co de
+con ver
+c t
+l in
+D a
+p la
+ch ar
+ma t
+r ow
+si on
+datetime .
+e l
+an  
+     
+d o
+-  
+= '
+e a
+,How  do 
+. j
+i e
+p .
+b y 
+ac ter
+ll  
+char acter
+k  
+o b
+s s
+t _
+al l
+item s()
+( x
+"""" ""
+sorte d(
+0 0
+p ar
+s c
+s  in 
+ from  
+dictionar y
+a b
+o l
+x  in 
+ ar ray
+tup le
+2 3
+T r
+g ro
+s um
+  of 
+us ing 
+ge (
+h ow
+w a
+re mov
+.j oin
+( a
+key= lambda 
+C on
+ob j
+gro up
+ge t
+python  
+.s pli
+ind ex
+z ip
+f or
+p e
+p ro
+ an  
+,How do  I 
+c an 
+w h
+ec t
+ul ti
+[0 ]
++  
+1 , 
+n p.
+s o
+v ar
+ge t 
+Da ta
+Tr ue
+p andas 
+ a ll 
+dic t
+') .
+i c
+p p
+co m
+2 , 
+q u
+re n
+er  
+\n     
+( )
+
+] )"
+
+al  
+ in Python ,"
+i s 
+n e
+ur l
+num py
+ in python ,"
+lin e
+wa y
+i t
+x : 
+ an d 
+ran ge(
+tw o 
+.join (
+i m
+i st
+q ue
+s  from a 
+,How  can 
+s pli
+obj ect
+b a
+c e 
+i  in 
+p lo
+re pla
+ch ec
+op en
+code ('
+Con ver
+Data F
+d ex
+h a
+te g
+li b
+: \n    
+[ :
+re g
+my _
+= True
+an g
+string ,"
+rea d
+s er
+data f
+k , 
+te xt
+df ['
+\ x
+m ulti
+,How can  I 
+ in teg
+ to  a 
+Python : 
+ex p
+ta in
+ite r
+value s
+dictionar y 
+P andas 
+un i
+.s ub
+' : 
+] , 
+n  
+s h
+on  
+list ,
+o o
+re .sub
+ce s
+ in python ,
+.spli t('
+'  
+) ]"
+
+- 1
+i d
+x is
+ra me 
+way  to 
+_ _
+n o
+t ing a 
+th e
+co mp
+how  to 
+) ]
+
+1 1
+c ur
+or ma
+string ,
+do m
+zip (
+G e
+s y
+ in dex
+ into  
+conver t 
+re.sub ('
+di r
+"""" """"
+lo a
+o u
+p (
+co d
+ran dom
+ct or
+plo t
+,  a
+= = 
+S or
+i ab
+p d.
+u e 
+in da
+,  '
+ar  
+ch  
+chec k 
+s p
+w ord
+s  of a 
+var iab
+k,  v
+ integ er
+inda ll
+[ x
+h t
+i r
+o th
+s e 
+st e
+=True )"
+
+( ?
+. items()
+[ i
+s a
+re .f
+dic t(
+fi c
+path .
+repla ce
+[ (
+s v
+di re
+ in Python ?,
+ut f
+len (
+exp res
+a te
+c t 
+c tion
+on e
+val ue 
+xis =
+  with 
+. str
+]  for 
+c sv
+h ex
+s ?,"
+key=lambda  x: 
+ne w
+open ('
+indall ('
+b in
+r i
+t ur
+re .
+re que
+dictionar ie
+ fi le
+so me
+ba se
+sp ec
+3 , 
+x  
+te n
+en  
+') )"
+
+pa ss
+ in Python ,
+.f ind
+ into  a 
+dataf rame
+( ['
+b e
+d u
+j ang
+in d 
+.f orma
+remov e 
+re.f indall('
+spec i
+a pp
+r ip
+s pa
+ma p(
+ver se
+'] )"
+
+ in Python ?,"
+os. path.
+group by
+dire ctor
+expres sion
+/ /
+b u
+l ter
+t y
+{ '
+list s
+co un
+en d
+time ('
+prin t('
+tr i
+sc rip
+sum (
+cod e 
+l y
+p anda
+t ra
+s  of 
+list of  tuple
+ul ar 
+d. items()
+DataF rame
+multi p
+cur ren
+) )
+0 , 
+p er
+te  a 
+How  to 
+[1 , 
+Re mov
+s =
+t .
+in t(
+ in  list(
+se t(
+') )
+
+ an oth
+.s or
+reque st
+base d 
+c k
+s (
+te st
+se t_
+ex ist
+con tain
+men t 
+replace ('
+- 8
+p o
+ti me 
+s  = 
+s  with 
+de l
+com m
+:\n     pass
+.forma t(
+speci fic
+ular  expression
+  + 
+% Y
+9 9
+D jang
+,How  to
+ for  x in 
+un ction
+code(' utf
+  == 
+*  
+7 ,How to 
+C o
+d er
+e s
+s , 
+se n
+ra y 
+fi le 
+) for  x in 
+sub pro
+datetime. datetime.
+2 .
+S tr
+_ list
+l ow
+s on
+x .
+re verse
+lo g
+\\ d
+  (
+  if 
+N um
+P anda
+c rea
+f oo
+n i
+o ur
+t p
+u ti
+v e
+w r
+si z
+Python  - 
+if  a 
+ ar ray 
+conver t a 
+Conver t 
+lib .
+variab le
+subpro ces
+- %
+5 ,How to 
+8 ,How to 
+d d
+t ter
+ro un
+se t
+'] .
+Re g
+director y
+.sor t(
+g e 
+i g
+l st
+m on
+s  from 
+t xt
+," df.
+t  the 
+ex ec
+ in python ?,"
+remov e
+i in  range(
+specific  
+a mp
+f rom
+l y 
+s )"
+
+s  to 
+,  b
+re tur
+ex tra
+tion  
+ord er
+mat ch
+ht tp
+ri ver
+subproces s.
+' .join(
+1 )"
+
+6 ,How to 
+C h
+d river
+g en
+," sorted(
+() .
+multip le 
+( [
+L ist
+g u
+m in
+s ing
+or  
+an d
+ma x
+ in Python  
+file .
+reg ex
+bin ar
+scrip t
+ anoth er 
+low er
+4 3
+g i
+i le
+p u
+v e 
+ a s
+)  if 
+mat plot
+reg ular expression
+3,  4
+curren t 
+' s 
+5 , 
+8 0
+>  
+d  in 
+i mp
+t ing
+in t
+,  y
+ in t
+al se
+se le
+sor t a 
+us e 
+ac k
+st  way to 
+par se
+based  on 
+1 .
+C rea
+F alse
+N one
+S O
+a t 
+c u
+c all
+f f
+{ 0
+st ar
+to ol
+str (
+se t 
+\\ s
+'] , 
+list of  list
+file name
+ fi le 
+get  the 
+ic  
+"""""""" """"
+ou t 
+, a xis=
+ste m
+exec u
+) ', '
+: %
+: //
+F ind
+S T
+\ u
+j son
+o ver
+w e
+er at
+ar ray
+str ip
+de c
+fi r
+']  = 
+ca te
+ array ,"
+DataF rame 
+' }
+4 ,How to 
+] )
+
+e mp
+v el
+on e 
+to  
+list ,"
+um  
+ta b
+ch o
+lo c
+lo at
+\\ w
+10 0
+ele ment 
+el lo
+iter tool
+sy stem
+itertool s.
+! = 
+' .format(
+( (
+) ))"
+
+) :\n    pass
+S o
+_ by
+i  
+n ow
+o ut
+st an
+er ate
+string  to 
+list  of
+de le
+ce p
+item  in 
+us er
+numpy .
+wr ite
+mon th
+retur n 
+matplot lib
+"""""""""""" .join(
+( )"
+
+1 )
+3 0
+3 ,How to 
+9 ,How to 
+S ele
+a .
+a tion
+f time('
+h en
+h ea
+m l
+p l
+p ut
+s )
+th at 
+ar ch
+t  = 
+Python ,"
+lo op
+value s in a 
+mb in
+res ul
+Ge t 
+set_ index
+Str ing
++ )
+F ind 
+[ ^
+a me
+g th
+i , 
+s ?,
+y our
+ a  string
+re hen
+str p
+de f
+up li
+key , 
+12 3
+column  
+[1 ]
+lambda  x: 
+number  of 
+lin e 
+ea ch 
+wh e
+pandas  dataframe
+'  %
+no t

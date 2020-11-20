@@ -3,28 +3,42 @@ import torch.nn as nn
 from fastai.text import *
 import numpy as np 
 import torch.nn.functional as F
-
-try: 
-    from transformers import *
+import token as tk
+from components.vocab import *
+try:
+    from cStringIO import StringIO
 except:
-    print("install transformers first")
-    # !pip install transformers
-    from transformers import *
-from tokenizers import Tokenizer
-from tokenizers.models import BPE
-from tokenizers.trainers import BpeTrainer
+    from io import StringIO
 
-tokenizer_src = Tokenizer(BPE())
-trainer_src = BpeTrainer(vocab_size=2000,special_tokens=["unk"])
-tokenizer_src.train(trainer_src, ["intent.txt"])
+import pickle
+from tokenize import generate_tokens
 
-tokenizer_code = Tokenizer(BPE())
-trainer_code = BpeTrainer(vocab_size=2000,special_tokens=["unk"])
-tokenizer_code.train(trainer_code, ["snip.txt"])
+# try: 
+#     from transformers import *
+# except:
+#     print("install transformers first")
+#     # !pip install transformers
+#     from transformers import *
+# from tokenizers import Tokenizer
+# from tokenizers.models import BPE
+# from tokenizers.trainers import BpeTrainer
+
+def tokenize_code(code, mode='decoder'):
+    
+    token_stream = generate_tokens(StringIO(code).readline)
+    tokens = []
+    t=[0,4,5,6,54]
+    for toknum, tokval, (srow, scol), (erow, ecol), _ in token_stream:
+        if toknum not in t:
+            tokens.append(tokval)
+
+    return tokens
+
 
 device = torch.device("cuda" if torch.cuda.is_available() else 'cpu')
 
-# class tokenizer
+vocab = pickle.load(open("data/vocab.bin", 'rb'))
+
 class Example:
     def __init__(self, input, output,target):
         self.input=input 
@@ -32,11 +46,8 @@ class Example:
         self.target=target
 
 class MyDataset(Dataset):
-    def __init__(self, tokenizer_src,tokenizer_code, df, max_len=30):
-        self.tokenizer_src=tokenizer_src
-        self.tokenizer_code=tokenizer_code
-        # self.inputs=[]
-        # self.outputs=[]
+    def __init__(self, df, max_len=25):
+       
         self.examples=[]
         self.max_len=max_len
         self.df=df
@@ -54,29 +65,51 @@ class MyDataset(Dataset):
     def init_dataset(self):
         a=self.df
         for i in range(len(a)):
-            a.iloc[i][0]=a.iloc[i][0]
-            a.iloc[i][1]=a.iloc[i][1]
+            # a.iloc[i][0]=a.iloc[i][0]
+            # a.iloc[i][1]=a.iloc[i][1]
+            
             intent=a.iloc[i][0]
             snip=a.iloc[i][1]
+            # print("intent is ",intent)
             """might need to change the tokenizer"""
-            inputs=torch.tensor(self.tokenizer_src.encode(intent).ids)
-            targets=torch.tensor(self.tokenizer_code.encode(snip).ids)
-            outputs=torch.tensor([0]+targets.tolist()[:-1])
+            try:
+                k=intent.split(' ')
+            except:
+                print(intent)
+                continue
+            # try:
+                # print(type(str(snip)))
+            # snip='"{}"'.format(snip)
+            # print(snip)
+            # print(i)
+            try:
+                t=tokenize_code(snip)
+                # print(t)
+            except:
+                print(str(snip))
+                continue
+            # outputs=[0]+targets.tolist()[:-1]
             # outputs=torch.tensor([0]+self.tokenizer.encode(snip).ids[:-1])
 
-            if (inputs.shape[0]>=self.max_len or outputs.shape[0]>=self.max_len or targets.shape[0]>=self.max_len):
+            if (len(k)>=self.max_len or len(t)>=self.max_len ):
                 # print(tokenized_inputs.shape[0],tokenized_outputs.shape[0])
                 continue
+            inputs=[]
+            targets=[]
+            for word in k:
+                inputs.append(vocab.source[word])
+            for token in t:
+                targets.append(vocab.primitive[token])
+            
+            outputs=[0]+targets[:-1]
+            inputs=torch.tensor(inputs)
+            outputs=torch.tensor(outputs)
+            targets=torch.tensor(targets)
 
             # self.tokenizer.enable_padding(length=self.max_len)
             tokenized_inputs=self.new_tensor(self.max_len).zero_()
-            # print(tokenized_inputs,"zeros")
-            
             tokenized_inputs[0:inputs.shape[0]]=inputs
-            
-            # print("shape ",inputs.shape[0])
-            # print(inputs, "inputs")
-            # print(tokenized_inputs,"tok inputs")
+           
 
             tokenized_targets=self.new_tensor(self.max_len).zero_()
             
@@ -85,12 +118,11 @@ class MyDataset(Dataset):
             tokenized_outputs=self.new_tensor(self.max_len).zero_()
             
             tokenized_outputs[0:outputs.shape[0]]=outputs
-            # print(outputs,"output")
-            # print(targets,"targets")
+            # print("input: ",tokenized_inputs)
 
-            
-            
-
+            # print("out: ",tokenized_outputs)
+            # print("tar: ",tokenized_targets)
+           
             example=Example(tokenized_inputs,tokenized_outputs,tokenized_targets)
             self.examples.append(example)
     
@@ -103,21 +135,4 @@ class MyDataset(Dataset):
             ids=index[bs*i:bs*(i+1)]
             ex=[self.examples[m] for m in ids]
             yield ex
-
-        
-
-
-    
-
-
-bs_train=64;bs_valid=64
-
-
-
-
-
-
-
-
-
 
