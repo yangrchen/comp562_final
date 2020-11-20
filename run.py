@@ -212,8 +212,8 @@ def evaluate(inputs, outputs, targets):
   for i in range(10):
     print("output: ",outputs[i])
     print("target: ",targets[i])
-  # bleu_tup = compute_bleu([[tokenize_for_bleu_eval(''.join(x))] for x in outputs], [tokenize_for_bleu_eval(''.join(x)) for x in targets], smooth=False)
-  bleu_tup = compute_bleu([[x] for x in outputs], targets, smooth=False)
+  bleu_tup = compute_bleu([[tokenize_for_bleu_eval(''.join(x))] for x in outputs], [tokenize_for_bleu_eval(''.join(x)) for x in targets], smooth=False)
+  # bleu_tup = compute_bleu([[x] for x in outputs], targets, smooth=False)
 
   bleu = bleu_tup[0]
   print(bleu_tup)
