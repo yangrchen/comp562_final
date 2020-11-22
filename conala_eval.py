@@ -9,7 +9,7 @@ import tokenize
 import argparse
 
 import bleu as bleu_score
-
+"""evaluation code from official Conala organizers"""
 # Main function for CodaLab evaluation purposes
 def main():
 

@@ -50,11 +50,8 @@ class MultiHeadAttention(nn.Module):
 
 def get_output_mask(inp, pad_idx=1):
     return torch.triu(inp.new_ones(inp.size(1),inp.size(1)), diagonal=1)[None,None].bool()
-#     return ((inp == pad_idx)[:,None,:,None].long() + torch.triu(inp.new_ones(inp.size(1),inp.size(1)), diagonal=1)[None,None] != 0)
 
 class EncoderBlock(nn.Module):
-    "Encoder block of a Transformer model."
-    #Can't use Sequential directly cause more than one input...
     def __init__(self, n_heads, d_model, d_head, d_inner, p=0., bias=True, scale=True, double_drop=True):
         super().__init__()
         self.mha = MultiHeadAttention(n_heads, d_model, d_head, p=p, bias=bias, scale=scale)
@@ -64,7 +61,6 @@ class EncoderBlock(nn.Module):
 
 class DecoderBlock(nn.Module):
     "Decoder block of a Transformer model."
-    #Can't use Sequential directly cause more than one input...
     def __init__(self, n_heads, d_model, d_head, d_inner, p=0., bias=True, scale=True, double_drop=True):
         super().__init__()
         self.mha1 = MultiHeadAttention(n_heads, d_model, d_head, p=p, bias=bias, scale=scale)

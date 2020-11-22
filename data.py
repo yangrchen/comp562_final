@@ -13,15 +13,7 @@ except:
 import pickle
 from tokenize import generate_tokens
 
-# try: 
-#     from transformers import *
-# except:
-#     print("install transformers first")
-#     # !pip install transformers
-#     from transformers import *
-# from tokenizers import Tokenizer
-# from tokenizers.models import BPE
-# from tokenizers.trainers import BpeTrainer
+
 
 def tokenize_code(code, mode='decoder'):
     
@@ -65,8 +57,6 @@ class MyDataset(Dataset):
     def init_dataset(self):
         a=self.df
         for i in range(len(a)):
-            # a.iloc[i][0]=a.iloc[i][0]
-            # a.iloc[i][1]=a.iloc[i][1]
             
             intent=a.iloc[i][0]
             snip=a.iloc[i][1]
@@ -77,22 +67,15 @@ class MyDataset(Dataset):
             except:
                 print(intent)
                 continue
-            # try:
-                # print(type(str(snip)))
-            # snip='"{}"'.format(snip)
-            # print(snip)
-            # print(i)
+            
             try:
                 t=tokenize_code(snip)
                 # print(t)
             except:
                 print(str(snip))
                 continue
-            # outputs=[0]+targets.tolist()[:-1]
-            # outputs=torch.tensor([0]+self.tokenizer.encode(snip).ids[:-1])
 
             if (len(k)>=self.max_len or len(t)>=self.max_len ):
-                # print(tokenized_inputs.shape[0],tokenized_outputs.shape[0])
                 continue
             inputs=[]
             targets=[]
@@ -106,7 +89,6 @@ class MyDataset(Dataset):
             outputs=torch.tensor(outputs)
             targets=torch.tensor(targets)
 
-            # self.tokenizer.enable_padding(length=self.max_len)
             tokenized_inputs=self.new_tensor(self.max_len).zero_()
             tokenized_inputs[0:inputs.shape[0]]=inputs
            
@@ -118,10 +100,6 @@ class MyDataset(Dataset):
             tokenized_outputs=self.new_tensor(self.max_len).zero_()
             
             tokenized_outputs[0:outputs.shape[0]]=outputs
-            # print("input: ",tokenized_inputs)
-
-            # print("out: ",tokenized_outputs)
-            # print("tar: ",tokenized_targets)
            
             example=Example(tokenized_inputs,tokenized_outputs,tokenized_targets)
             self.examples.append(example)

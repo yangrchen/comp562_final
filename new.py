@@ -317,7 +317,6 @@ class Transformer(Module):
             out=self.emb(out)
             
             out=compose(self.decoder)(out, enc,bert_out)
-            out=self.out(out)
             
             out=out.detach()
             # print("the shape of the out is ",out.shape)
@@ -326,7 +325,7 @@ class Transformer(Module):
             array.append(token.item())
         # print(tokenizer.decode(array))
         # print(tokenizer.decode(inp))
-        return array[1:]
+        return array
 
 # inp_emb(torch.tensor([1,2,3])).shape
 
@@ -383,7 +382,7 @@ def evaluate(inputs, outputs, targets):
   bleu = bleu_tup[0]
   print(bleu_tup)
   return bleu
-epoch=20
+epoch=10
 
 c_epoch=0
 while True:
@@ -439,7 +438,7 @@ while True:
       
       print("valid_loss ",valid_loss/j)
       model.train()
-    if c_epoch>16:
+    if c_epoch==9:
         model.eval()
         i=0
         outputs=[]
@@ -455,24 +454,13 @@ while True:
 
             for m,j in enumerate(inp):
                 pred=model(j.to(device),gs=True)
-
                 l=['<s>','</s>','<pad>','�']
-                # y=tokenizer.decode(pred)
-                y=[tokenizer.decode([id]) for id in pred if tokenizer.decode([id]) not in l]
-                # print("the type of y is ",y)
-                # y=[a for a in y if a not in l ]
-                # print("the after y is ",y)
-                # z=tokenizer.decode(targ[m].tolist())
-                z=[tokenizer.decode([id]) for id in targ[m].tolist() if tokenizer.decode([id]) not in l]
-                # print("the z is ",z)
-                # z=[a for a in z if a not in l ]
-                # print("the after z is ",z)
-                # print('y is ',y)
-                # print('z is ',z)
-                # # outputs.append(' '.join(y))
-                # targets.append(' '.join(z))
-                outputs.append(y)
-                targets.append(z)
+                y=[tokenizer.decode(pred)]
+                y=[a for a in y if a not in l ]
+                z=[tokenizer.decode(targ[m].tolist())]
+                z=[a for a in z if a not in l ]
+                outputs.append(' '.join(y))
+                targets.append(' '.join(z))
 
 
 

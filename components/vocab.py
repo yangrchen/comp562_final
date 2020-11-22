@@ -1,5 +1,5 @@
 # coding=utf-8
-
+"""this vocab code is adapted from TRANX project: https://github.com/pcyin/tranX"""
 from __future__ import print_function
 
 from collections import Counter
